@@ -11,6 +11,8 @@ setTimeout(() => {
 console.log(importedStuff)
 //console.log(importedStuff.nums)*/
 
+//---------------------------------------------------------------------------------
+/*
 const fs = require('fs')
 
 //READ file
@@ -77,3 +79,20 @@ if(fs.existsSync('./ckmobile/note.txt')) {
 } else {
     console.log('The folder already deleted')
 }
+*/
+
+
+//--------------------------------------------------------------------
+const fs = require('fs')
+
+const readStream = fs.createReadStream('largetext.txt',{encoding: 'utf-8'})
+const writeStream = fs.createWriteStream('writeStream.txt');
+readStream.on('data', chunk => {
+    console.log('##### new chunk #####')
+    console.log(chunk)
+
+    writeStream.write('\n ##### new chunk ##### \n');
+    writeStream.write(chunk);
+
+})
+//readStream.pipe(writeStream) 
