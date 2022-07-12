@@ -83,7 +83,7 @@ if(fs.existsSync('./ckmobile/note.txt')) {
 
 
 //--------------------------------------------------------------------
-const fs = require('fs')
+/*const fs = require('fs')
 
 const readStream = fs.createReadStream('largetext.txt',{encoding: 'utf-8'})
 const writeStream = fs.createWriteStream('writeStream.txt');
@@ -94,5 +94,14 @@ readStream.on('data', chunk => {
     writeStream.write('\n ##### new chunk ##### \n');
     writeStream.write(chunk);
 
-})
+})*/
 //readStream.pipe(writeStream) 
+
+const express = require('express')
+const app = express()
+
+app.get('/', (req, res) => {
+    res.send('<h1>Hello World!</h1>')
+});
+  
+app.listen(3000);
