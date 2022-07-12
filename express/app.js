@@ -101,10 +101,16 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req, res) => {
-    res.send('<p>Home Page</p>')
+    //res.send('<p>Home Page</p>')
+    res.sendFile('./views/index.html', {root: __dirname})
 });
+
 app.get('/add-item', (req, res) => {
-    res.send('<h1>Add Items</h1>')
+    res.sendFile('./views/add-item.html', {root: __dirname})
 });
-  
+
+app.use((req,res) => {
+    res.sendFile('./views/error.html', {root: __dirname})
+}); //usarlo siempre al final
+
 app.listen(3000);
