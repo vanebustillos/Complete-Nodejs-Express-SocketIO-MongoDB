@@ -101,7 +101,10 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>')
+    res.send('<p>Home Page</p>')
+});
+app.get('/add-item', (req, res) => {
+    res.send('<h1>Add Items</h1>')
 });
   
 app.listen(3000);
