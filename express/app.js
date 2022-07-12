@@ -97,8 +97,14 @@ readStream.on('data', chunk => {
 })*/
 //readStream.pipe(writeStream) 
 
-const express = require('express')
+const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
+
+const mongodb = 'mongodb+srv://admin:admin@cluster0.fdiy4to.mongodb.net/item-database?retryWrites=true&w=majority';
+mongoose.connect(mongodb, { useNewUrlParser: true }).then(() => 
+    console.log('connected')).catch(err => console.log(err))
+
 app.set('view engine', 'ejs');
 app.listen(3000);
 
