@@ -99,12 +99,14 @@ readStream.on('data', chunk => {
 
 const express = require('express');
 const mongoose = require('mongoose');
+const Item = require('./models/items');
 const app = express();
 
 const mongodb = 'mongodb+srv://admin:admin@cluster0.fdiy4to.mongodb.net/item-database?retryWrites=true&w=majority';
 mongoose.connect(mongodb, { useNewUrlParser: true }).then(() => 
     console.log('connected')).catch(err => console.log(err))
 
+app.use(express.urlencoded({extended: true }));
 app.set('view engine', 'ejs');
 app.listen(3000);
 
@@ -112,17 +114,61 @@ app.get('/', (req, res) => {
     //res.send('<p>Home Page</p>')
     //res.sendFile('./views/index.html', {root: __dirname})
     //res.render('index', { title2: 'some titlee2'});
-    const items = [
+    /*const items = [
         { name: 'mobile phone', price: 1000 },
         { name: 'book', price: 30 },
         { name: 'computer', price: 2000 },
     ]
-    res.render('index', {items});
+    res.render('index', {items});*/
+    res.redirect('/get-items');
 });
+
+app.get('/create-item', (req, res) => {
+    const item = new Item({
+        name: 'computer',
+        price:2000
+    });
+    item.save().then(result => res.send(result));
+})
+
+app.get('/get-items', (req, res) => {
+    Item.find().then(result => {
+        //res.send(result)
+        res.render('index', { items: result });
+    }).catch(err => console.log(err));
+})
+
+app.get('/get-item', (req, res) => {
+    Item.findById('62cdec52d1666c2631ca754c').then(result => res.send(result)).catch(err => console.log(err));
+})
 
 app.get('/add-item', (req, res) => {
    // res.sendFile('./views/add-item.html', {root: __dirname})
    res.render('add-item')
+});
+
+app.post('/items', (req, res)=> {
+    const item = Item(req.body);
+    item.save().then(() => {
+        res.redirect('/get-items');
+    }).catch(err => console.log(err));
+});
+
+app.get('/items/:id', (req, res) => {
+    console.log(req.params);
+    const id =  req.params.id;
+    Item.findById(id).then(result => {
+        console.log('result', result);
+        res.render('item-detail', { item: result })
+    })
+});
+
+app.delete('/items/:id', (req, res) => {
+    const id =  req.params.id;
+    Item.findByIdAndDelete(id).then(result => {
+        //res.redirect('/get-items');
+        res.json({ redirect: '/get-items' })
+    }).catch(err => console.log(err));
 });
 
 app.use((req,res) => {
